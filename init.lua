@@ -127,8 +127,12 @@ function plugin:onParseValues(data, extra)
 
   local parsed = json.parse(data)
   for k, v in pairs(stats_total) do
-    local samples = parsed.op.samples[k] or {} 
+    local samples = parsed.op.samples[k] or {}
+    if samples[#samples] == nil then
+    stats_total[k] = v
+    else 
     stats_total[k] = v + tonumber(samples[#samples]) or 0
+    end
   end
 
   pending_requests[extra.info] = nil
